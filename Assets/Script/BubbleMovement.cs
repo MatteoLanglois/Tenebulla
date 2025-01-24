@@ -28,7 +28,7 @@ public class BubbleMovement : MonoBehaviour
             horizontalInput = 0f;
         }
 
-        Debug.Log(horizontalInput);
+        //Debug.Log(horizontalInput);
         Vector3 force = new Vector3(horizontalInput * moveForce, 0, 0);
         rb.AddForce(force);
     }

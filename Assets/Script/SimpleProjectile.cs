@@ -6,12 +6,16 @@ using TMPro;
 public class SimpleShooter : MonoBehaviour
 {
     public Rigidbody projectile; // R�f�rence au prefab du projectile
-    [Range(5f, 150f)] public float projectileForce; // Force de projection
-    public float defaultForce = 50f; // Force par d�faut si aucune n'est d�finie
+    public float projectileForce; // Force de projection
+    public float defaultForce = 1f; // Force par d�faut si aucune n'est d�finie
     public TMP_Text forceText; // Affichage de la force sur l'UI
     public float delay = 0.5f; // D�lai entre les tirs
 
-    private IEnumerator coroutine; // Coroutine pour le d�lai
+    public float fireRate = 2f; // Temps entre chaque tir (en secondes)
+
+    private float nextFireTime; // Chronomètre interne pour le tir
+
+    private IEnumerator coroutine; // Coroutine pour le délai
 
     void Start()
     {
@@ -19,7 +23,7 @@ public class SimpleShooter : MonoBehaviour
         projectileForce = defaultForce;
         UpdateForceText();
 
-        Shoot();
+        nextFireTime = Time.time; // Démarre immédiatement
     }
 
     // Augmenter la force de tir
@@ -48,19 +52,17 @@ public class SimpleShooter : MonoBehaviour
     // M�thode pour tirer
     public void Shoot()
     {
-        if (coroutine == null) // �vite de d�marrer plusieurs fois la coroutine
-        {
-            Debug.Log("aled2");
-            coroutine = ShooterDelay(delay);
-            StartCoroutine(coroutine);
-        }
+        
+        coroutine = ShooterDelay(delay);
+        StartCoroutine(coroutine);
+        
     }
 
     // Coroutine pour le d�lai de tir
     private IEnumerator ShooterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
-        Debug.Log("aled1");
+        
         if (projectile != null)
         {
             
@@ -68,14 +70,24 @@ public class SimpleShooter : MonoBehaviour
             Rigidbody cloneProjectile = Instantiate(projectile, transform.position, transform.rotation);
 
             // Application de la force
-            cloneProjectile.linearVelocity = Vector3.up * projectileForce;
+            cloneProjectile.linearVelocity = Vector3.up * projectileForce/10f;
             Debug.Log("Direction : " + transform.forward + " | Vélocité : " + cloneProjectile.linearVelocity);
 
             // Destruction du projectile apr�s 5 secondes
-            //Destroy(cloneProjectile.gameObject, 5f);
+            Destroy(cloneProjectile.gameObject, 3f);
         }
 
         // Fin de la coroutine
         coroutine = null;
+    }
+
+    void Update()
+    {
+        // Vérifie si le délai de tir est écoulé
+        if (Time.time >= nextFireTime)
+        {
+            Shoot(); // Tire un projectile
+            nextFireTime = Time.time + fireRate; // Planifie le prochain tir
+        }
     }
 }
