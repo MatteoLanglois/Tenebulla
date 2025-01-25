@@ -74,7 +74,7 @@ public class SimpleShooter : MonoBehaviour
             Debug.Log("Direction : " + transform.forward + " | Vélocité : " + cloneProjectile.linearVelocity);
 
             // Destruction du projectile apr�s 5 secondes
-            Destroy(cloneProjectile.gameObject, 3f);
+            Destroy(cloneProjectile.gameObject, 2f);
         }
 
         // Fin de la coroutine
