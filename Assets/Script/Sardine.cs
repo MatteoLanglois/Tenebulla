@@ -2,17 +2,17 @@ using UnityEngine;
 
 public class SardineMovement : MonoBehaviour
 {
-    // Définir la zone avec xDepart, xFin, yDebut, yFin
+    // Definir la zone avec xDepart, xFin, yDebut, yFin
     public float xDepart = -30f; // Limite gauche de la zone
     public float xFin = 30f;     // Limite droite de la zone
     public float yDebut = 20f;  // Limite basse de la zone
     public float yFin = 60f;     // Limite haute de la zone
 
-    public float speed = 6f; // Vitesse de déplacement
+    public float speed = 6f; // Vitesse de deplacement
     public float changeDirectionInterval = 2f; // Temps entre chaque changement de direction
 
-    private Vector2 randomDirection; // Direction aléatoire actuelle (2D)
-    private float timer; // Chronomètre pour changer de direction
+    private Vector2 randomDirection; // Direction aleatoire actuelle (2D)
+    private float timer; // Chronometre pour changer de direction
 
     void Start()
     {
@@ -21,33 +21,33 @@ public class SardineMovement : MonoBehaviour
         yDebut = 20f;  // Limite basse de la zone
         yFin = 60f;
 
-        // Initialisation de la première direction aléatoire
+        // Initialisation de la premiere direction aleatoire
         randomDirection = GetRandomDirection();
     }
 
     void Update()
     {
-        // Déplace la sardine dans la direction aléatoire
-        Vector3 movement = new Vector3(randomDirection.x, randomDirection.y, 0f) * speed * Time.deltaTime;
+        // Deplace la sardine dans la direction aleatoire
+        Vector3 movement = new Vector3(randomDirection.x, randomDirection.y, 0f) * (speed * Time.deltaTime);
         transform.Translate(movement, Space.World);
 
-        // Compte le temps écoulé
+        // Compte le temps ecoule
         timer += Time.deltaTime;
 
-        // Change de direction après l'intervalle défini
+        // Change de direction apres l'intervalle defini
         if (timer >= changeDirectionInterval)
         {
             randomDirection = GetRandomDirection();
             timer = 0f;
         }
 
-        // Garde la sardine dans la zone définie
+        // Garde la sardine dans la zone definie
         KeepInBounds();
     }
 
     private Vector2 GetRandomDirection()
     {
-        // Génère une direction aléatoire (normale) sur X et Y
+        // Genere une direction aleatoire (normale) sur X et Y
         Vector2 randomDir = new Vector2(
             Random.Range(-1f, 1f),
             Random.Range(-1f, 1f)
@@ -60,15 +60,14 @@ public class SardineMovement : MonoBehaviour
         Vector3 pos = transform.position;
 
 
-        // Vérifie si la sardine est hors de la zone
+        // Verifie si la sardine est hors de la zone
         bool isOutOfBounds = false;
 
         // Si la sardine est en dehors de la zone sur l'axe X
         if (pos.x < xDepart || pos.x > xFin)
         {
             isOutOfBounds = true;
-            Debug.Log("hors de la zone sur l'axe X :"+pos + " pos.x < xDepart:" + (pos.x < xDepart) + " pos.x > xFin :"+ (pos.x > xFin) );
-            // Change de direction pour ramener la sardine dans la zone (opposé de la direction actuelle)
+            // Change de direction pour ramener la sardine dans la zone (opposï¿½ de la direction actuelle)
             randomDirection.x = (pos.x < xDepart) ? 1f : -1f;
             timer = 0f;
         }
@@ -77,9 +76,7 @@ public class SardineMovement : MonoBehaviour
         if (pos.y < yDebut || pos.y > yFin)
         {
             isOutOfBounds = true;
-            Debug.Log("yFin:" +yFin);
-            Debug.Log("hors de la zone sur l'axe Y :" + pos + "pos.y < yDebut:" + (pos.y < yDebut) + " pos.y > yFin:" + (pos.y > yFin) );
-            // Change de direction pour ramener la sardine dans la zone (opposé de la direction actuelle)
+            // Change de direction pour ramener la sardine dans la zone (opposï¿½ de la direction actuelle)
             randomDirection.y = (pos.y < yDebut) ? 1f : -1f;
             timer = 0f;
         }

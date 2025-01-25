@@ -16,7 +16,7 @@ namespace Script
 
         private Vector3 _originalScale; // Taille initiale
         private Color _originalColor; // Couleur initiale
-        private new Renderer _renderer; // Renderer pour changer la couleur
+        private Renderer _renderer; // Renderer pour changer la couleur
         private bool _isBlinking = false; // Indique si le pufferfish clignote
         private bool _isGrowing = false; // Indique si le pufferfish est en train de grossir
         private bool _playerInRange = false; // Indique si le joueur est proche
