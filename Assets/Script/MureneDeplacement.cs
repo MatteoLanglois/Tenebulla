@@ -21,12 +21,20 @@ public class MureneDeplacement : MonoBehaviour
     private Vector3 debutExtention;
     private Vector3 avance;
     private float timer;
+  
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         debutExtention = transform.position;
         initialiseAvance();
+        setPos(depart);
+
+        //fait en sorte que le sprite soit retourné si il est trop tourné (qu'il est a l'envers)
+        if (spawner.transform.eulerAngles.z > 90 && spawner.transform.eulerAngles.z < 270)
+        {
+            transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y, -transform.localScale.z);
+        }
     }
     private void OnValidate()
     {
@@ -78,5 +86,10 @@ public class MureneDeplacement : MonoBehaviour
             timer = attente;
 
         }
+    }
+
+    private void setPos(float longueur)
+    {
+
     }
 }
