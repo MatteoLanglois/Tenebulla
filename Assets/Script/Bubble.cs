@@ -131,7 +131,7 @@ namespace Script
 
             var lifeOrb = other.gameObject.GetComponent<LifeOrb>();
             if (lifeOrb == null) return;
-            Debug.Log("LifeOrb collision");
+            //Debug.Log("LifeOrb collision");
             life = Mathf.Min(life + lifeOrb.GetLifeAmount(), MaxLife);
             Destroy(other.gameObject);
         }
