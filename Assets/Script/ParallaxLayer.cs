@@ -33,7 +33,6 @@ public class ParallaxEffect : MonoBehaviour
                 // Appliquer un décalage proportionnel au parallaxFactor
                 var layerPosition = layer.layer.position;
                 layerPosition.x += cameraDelta.x * layer.parallaxFactor;
-                layerPosition.y += cameraDelta.y * layer.parallaxFactor;
 
                 layer.layer.position = layerPosition;
             }

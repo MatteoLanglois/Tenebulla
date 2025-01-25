@@ -17,7 +17,7 @@ namespace Script
         public float buoyancyThreshold = 0.75f;  // Taille minimum pour que la bulle monte
 
         // Dash settings
-        public float dashForce = 10f; // Force du dash
+        public float dashForce = 50f; // Force du dash
         public float dashCooldown = 1f; // Temps entre deux dashs
         private bool _canDash = true;
         public AudioSource audioSource;
@@ -92,9 +92,17 @@ namespace Script
         private void PerformDash()
         {
             // Applique une force vers le haut
-            var dashDirection = new Vector3(Input.GetAxisRaw("Horizontal"), 1).normalized;
-            _rb.linearVelocity = Vector3.zero; // Réinitialise toute la vitesse
+            var dashDirection = new Vector3(Input.GetAxisRaw("Horizontal"), 1).normalized + Vector3.up;
+            //_rb.linearVelocity = Vector3.zero; // Réinitialise toute la vitesse
             _rb.AddForce(dashDirection * dashForce, ForceMode.Impulse);
+            if (life > 31f)
+            {
+                life -= 30f;
+            }
+            else
+            {
+                life = 1f;
+            }
             if (audioSource) {
                 audioSource.Play();
             }
