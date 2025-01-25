@@ -1,95 +1,90 @@
 using UnityEngine;
 
-public class MureneDeplacement : MonoBehaviour
+namespace Script
 {
-    //longueur de l'extention de la murene
-    public float longueur = 3;
-    //position de depart de la murene
-    public float depart = 0;
-
-    //vitesse d'extention de la murene
-    public float speed = 1;
-
-    //temps passé par la murene dans son tuyau avant de sortir
-    public float cooldown = 1;
-    //temps passé par la murene avant de se retracter
-    public float attente = 2;
-
-    public GameObject spawner;
-
-    private bool extention = false;
-    private Vector3 debutExtention;
-    private Vector3 avance;
-    private float timer;
-  
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public class MureneDeplacement : MonoBehaviour
     {
-        debutExtention = transform.position;
-        initialiseAvance();
-        setPos(depart);
+        //longueur de l'extention de la murene
+        public float longueur = 3;
+        //position de depart de la murene
+        public float depart = 0;
 
-        //fait en sorte que le sprite soit retourné si il est trop tourné (qu'il est a l'envers)
-        if (spawner.transform.eulerAngles.z > 90 && spawner.transform.eulerAngles.z < 270)
+        //vitesse d'extention de la murene
+        public float speed = 1;
+
+        //temps passï¿½ par la murene dans son tuyau avant de sortir
+        public float cooldown = 1;
+        //temps passï¿½ par la murene avant de se retracter
+        public float attente = 2;
+
+        public GameObject spawner;
+
+        private bool _extention = false;
+        private Vector3 _debutExtention;
+        private Vector3 _avance;
+        private float _timer;
+
+
+        // Start is called once before the first execution of Update after the MonoBehaviour is created
+        private void Start()
         {
-            transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y, -transform.localScale.z);
+            _debutExtention = transform.position;
+            initialiseAvance();
+            //setPos(depart);
+
+            //fait en sorte que le sprite soit retournï¿½ si il est trop tournï¿½ (qu'il est a l'envers)
+            if (spawner.transform.eulerAngles.z > 90 && spawner.transform.eulerAngles.z < 270)
+            {
+                transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y, -transform.localScale.z);
+            }
         }
-    }
-    private void OnValidate()
-    {
-        initialiseAvance();
-    }
-
-    void initialiseAvance()
-    {
-        Debug.Log(speed);
-        Vector3 direction = new Vector3(speed, 0, 0);
-        float angleZ = spawner.transform.eulerAngles.z;
-        Quaternion rotation = Quaternion.Euler(0, 0, angleZ);
-        avance = -(rotation * direction);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (timer > 0)
-        { 
-            timer -= Time.deltaTime;
-            if (timer < 0) timer = 0;
-            return;
-        }
-
-        if (extention)
+        private void OnValidate()
         {
-            transform.position += avance * Time.deltaTime;
+            initialiseAvance();
         }
-        else
+
+        private void initialiseAvance()
         {
-            transform.position -= avance * Time.deltaTime;
+            var direction = new Vector3(speed, 0, 0);
+            var angleZ = spawner.transform.eulerAngles.z;
+            var rotation = Quaternion.Euler(0, 0, angleZ);
+            _avance = -(rotation * direction);
         }
 
-        Vector3 ecart = transform.position-debutExtention;
-        float angleZ = spawner.transform.eulerAngles.z;
-        Quaternion rotation = Quaternion.Euler(0, 0, -angleZ);
-        float avancement = -(rotation * ecart).x;
-
-        if (avancement < 0)
+        // Update is called once per frame
+        private void Update()
         {
-            extention = true;
-            transform.position = debutExtention;
-            timer = cooldown;
+            if (_timer > 0)
+            {
+                _timer -= Time.deltaTime;
+                if (_timer < 0) _timer = 0;
+                return;
+            }
+
+            if (_extention)
+            {
+                transform.position += _avance * Time.deltaTime;
+            }
+            else
+            {
+                transform.position -= _avance * Time.deltaTime;
+            }
+
+            var ecart = transform.position-_debutExtention;
+            var angleZ = spawner.transform.eulerAngles.z;
+            var rotation = Quaternion.Euler(0, 0, -angleZ);
+            var avancement = -(rotation * ecart).x;
+
+            if (avancement < 0)
+            {
+                _extention = true;
+                transform.position = _debutExtention;
+                _timer = cooldown;
+            }
+
+            if (!(avancement > longueur)) return;
+            _extention = false;
+            _timer = attente;
         }
-        if (avancement > longueur) 
-        {
-            extention = false;
-            timer = attente;
-
-        }
-    }
-
-    private void setPos(float longueur)
-    {
-
     }
 }
