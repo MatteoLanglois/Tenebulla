@@ -17,8 +17,9 @@ namespace Script
         public float buoyancyThreshold = 0.75f;  // Taille minimum pour que la bulle monte
 
         // Dash settings
-        public float dashForce = 10f; // Force du dash
+        public float dashForce = 50f; // Force du dash
         public float dashCooldown = 1f; // Temps entre deux dashs
+        public float dashPrice = 30f; // Coût en vie du dash
         private bool _canDash = true;
         public AudioSource audioSource;
 
@@ -92,9 +93,17 @@ namespace Script
         private void PerformDash()
         {
             // Applique une force vers le haut
-            var dashDirection = new Vector3(Input.GetAxisRaw("Horizontal"), 1).normalized;
-            _rb.linearVelocity = Vector3.zero; // Réinitialise toute la vitesse
+            var dashDirection = new Vector3(Input.GetAxisRaw("Horizontal"), 1).normalized + Vector3.up;
+            //_rb.linearVelocity = Vector3.zero; // Réinitialise toute la vitesse
             _rb.AddForce(dashDirection * dashForce, ForceMode.Impulse);
+            if (life > dashPrice + 1f)
+            {
+                life -= dashPrice;
+            }
+            else
+            {
+                life = 1f;
+            }
             if (audioSource) {
                 audioSource.Play();
             }
@@ -127,13 +136,18 @@ namespace Script
 
         private void OnTriggerEnter(Collider other)
         {
-            if (!other.gameObject.CompareTag("LifeOrb")) return;
+            if (other.gameObject.CompareTag("LifeOrb"))
+            {
 
-            var lifeOrb = other.gameObject.GetComponent<LifeOrb>();
-            if (lifeOrb == null) return;
-            //Debug.Log("LifeOrb collision");
-            life = Mathf.Min(life + lifeOrb.GetLifeAmount(), MaxLife);
-            Destroy(other.gameObject);
+                var lifeOrb = other.gameObject.GetComponent<LifeOrb>();
+                if (lifeOrb == null) return;
+                life = Mathf.Min(life + lifeOrb.GetLifeAmount(), MaxLife);
+                Destroy(other.gameObject);
+            } else if (other.gameObject.CompareTag("Ennemy"))
+            {
+                life -= 20f;
+                other.gameObject.SetActive(false);
+            }
         }
     }
 }
