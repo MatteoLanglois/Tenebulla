@@ -13,10 +13,10 @@ namespace Script
         private Transform _initialTransform;
 
         // Movement settings
-        public float moveForce = 5f;       // Force de déplacement appliquée
-        public float maxSpeed = 4f;       // Vitesse maximale de la bulle
+        public float moveForce = 3f;       // Force de déplacement appliquée
+        public float maxSpeed = 200f;       // Vitesse maximale de la bulle
         public float waterResistance = 0.95f; // Réduction progressive de la vitesse pour simuler l'eau
-        public float buoyancyFactor = 1f;     // Force de flottabilité
+        public float buoyancyFactor = 4f;     // Force de flottabilité
         public float buoyancyThreshold = 0.25f;  // Taille minimum pour que la bulle monte
 
         // Dash settings
@@ -36,11 +36,12 @@ namespace Script
         // Death screen
         public GameObject deathScreen;
         public Button retryButton;
+        private Rigidbody _rigidbody;
 
         private void Start()
         {
-            _rb = GetComponent<Rigidbody>();
             _bubble = gameObject;
+            _rb = _bubble.GetComponent<Rigidbody>();
             _bubble.transform.localScale = new Vector3(bubbleSize, bubbleSize, bubbleSize);
             _initialTransform = transform;
             retryButton.onClick.AddListener(RestartGame);
@@ -77,7 +78,11 @@ namespace Script
             {
                 // La bulle est morte
                 _bubble.SetActive(false);
-                _bubble.GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
+                if (_rigidbody)
+                {
+                    _rigidbody = GetComponent<Rigidbody>();
+                }
+                _rigidbody.linearVelocity = Vector3.zero;
                 deathScreen.SetActive(true);
             }
 
@@ -101,12 +106,13 @@ namespace Script
             ApplyBuoyancy();
         }
 
-        private void RestartGame()
+        private static void RestartGame()
         {
             Time.timeScale = 1f;
             UnityEngine.SceneManagement.SceneManager.LoadScene(0);
         }
 
+        // ReSharper disable Unity.PerformanceAnalysis
         private void PerformDash()
         {
             var dashDirection = new Vector3(Input.GetAxisRaw("Horizontal"), 1).normalized + Vector3.up;
@@ -176,7 +182,7 @@ namespace Script
             if (bubbleSize >= buoyancyThreshold)
             {
                 // La bulle est assez grande pour flotter
-                var speed = bubbleSize * buoyancyFactor;
+                var speed = bubbleSize * buoyancyFactor * 2;
                 _rb.AddForce(Vector3.up * speed);
             }
             else

@@ -8,20 +8,16 @@ namespace Script
     {
         public Rigidbody projectile; // Reference au prefab du projectile
         public float projectileForce; // Force de projection
-        public float defaultForce = 1f; // Force par defaut si aucune n'est definie
+        private const float DefaultForce = 5f; // Force par defaut si aucune n'est definie
         public TMP_Text forceText; // Affichage de la force sur l'UI
         public float delay = 0.5f; // Delai entre les tirs
 
-        public float fireRate = 2f; // Temps entre chaque tir (en secondes)
-
         private float _nextFireTime; // Chronomètre interne pour le tir
 
-        private IEnumerator _coroutine; // Coroutine pour le délai
-
-        void Start()
+        private void Start()
         {
             // Initialisation de la force de tir
-            projectileForce = defaultForce;
+            projectileForce = DefaultForce;
             UpdateForceText();
 
             _nextFireTime = Time.time; // Démarre immédiatement
@@ -53,41 +49,32 @@ namespace Script
         // Methode pour tirer
         private void Shoot()
         {
-
-            _coroutine = ShooterDelay(delay);
-            StartCoroutine(_coroutine);
-
+            StartCoroutine(ShooterDelay(delay));
         }
 
         // Coroutine pour le delai de tir
-        private IEnumerator ShooterDelay(float delay)
+        private IEnumerator ShooterDelay(float delayParam)
         {
-            yield return new WaitForSeconds(delay);
+            yield return new WaitForSeconds(delayParam);
 
-            if (projectile)
-            {
+            if (!projectile) yield break;
+            // Instanciation du projectile
+            var cloneProjectile = Instantiate(projectile, transform.position, transform.rotation);
 
-                // Instanciation du projectile
-                var cloneProjectile = Instantiate(projectile, transform.position, transform.rotation);
+            // Application de la force
+            cloneProjectile.linearVelocity = Vector3.up * projectileForce;
 
-                // Application de la force
-                cloneProjectile.linearVelocity = Vector3.up * projectileForce/10f;
-
-                // Destruction du projectile apres 5 secondes
-                Destroy(cloneProjectile.gameObject, 3f);
-            }
-
-            // Fin de la coroutine
-            _coroutine = null;
+            // Destruction du projectile apres 5 secondes
+            Destroy(cloneProjectile.gameObject, 5f);
         }
 
-        void Update()
+        private void Update()
         {
             // Vérifie si le délai de tir est écoulé
             if (!(Time.time >= _nextFireTime)) return;
 
             Shoot(); // Tire un projectile
-            _nextFireTime = Time.time + fireRate; // Planifie le prochain tir
+            _nextFireTime = Time.time + delay; // Planifie le prochain tir
         }
     }
 }
