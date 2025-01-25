@@ -78,6 +78,10 @@ namespace Script
             {
                 // La bulle est morte
                 _bubble.SetActive(false);
+                if (_rigidbody)
+                {
+                    _rigidbody = GetComponent<Rigidbody>();
+                }
                 _rigidbody.linearVelocity = Vector3.zero;
                 deathScreen.SetActive(true);
             }
@@ -179,7 +183,6 @@ namespace Script
             {
                 // La bulle est assez grande pour flotter
                 var speed = bubbleSize * buoyancyFactor * 2;
-                Debug.Log(speed);
                 _rb.AddForce(Vector3.up * speed);
             }
             else
