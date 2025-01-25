@@ -67,7 +67,6 @@ public class SardineMovement : MonoBehaviour
         if (pos.x < xDepart || pos.x > xFin)
         {
             isOutOfBounds = true;
-            Debug.Log("hors de la zone sur l'axe X :"+pos + " pos.x < xDepart:" + (pos.x < xDepart) + " pos.x > xFin :"+ (pos.x > xFin) );
             // Change de direction pour ramener la sardine dans la zone (opposé de la direction actuelle)
             randomDirection.x = (pos.x < xDepart) ? 1f : -1f;
             timer = 0f;
@@ -77,8 +76,6 @@ public class SardineMovement : MonoBehaviour
         if (pos.y < yDebut || pos.y > yFin)
         {
             isOutOfBounds = true;
-            Debug.Log("yFin:" +yFin);
-            Debug.Log("hors de la zone sur l'axe Y :" + pos + "pos.y < yDebut:" + (pos.y < yDebut) + " pos.y > yFin:" + (pos.y > yFin) );
             // Change de direction pour ramener la sardine dans la zone (opposé de la direction actuelle)
             randomDirection.y = (pos.y < yDebut) ? 1f : -1f;
             timer = 0f;
