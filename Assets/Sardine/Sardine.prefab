@@ -149,9 +149,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53ff2fc7e1236374bbd784c88bc59055, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  xDepart: -5
-  xFin: 5
-  yDebut: -5
-  yFin: 5
+  zoneSardine: {fileID: 11400000, guid: 2ab3a34436ed17443a27b7ff2664f150, type: 2}
   speed: 3
   changeDirectionInterval: 2

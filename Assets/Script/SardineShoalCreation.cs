@@ -6,11 +6,8 @@ public class SardineShoalCreation : MonoBehaviour
     public GameObject sardineToSpawn; // L'objet à instancier
     public int numberOfObjects = 10; // Nombre d'objets à instancier
 
-    // Définir les limites de la zone sur les axes X et Y
-    public float xMin = -50f;
-    public float xMax = 50f;
-    public float yMin = 400f;
-    public float yMax = 600f;
+    // Zone de spawn
+    public SardineZone zoneSardine;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -22,11 +19,12 @@ public class SardineShoalCreation : MonoBehaviour
 
     void SpawnObjects()
     {
+        Debug.Log("Aled ?");
         for (int i = 0; i < numberOfObjects; i++)
         {
             // Générer une position aléatoire dans la zone définie
-            float randomX = Random.Range(xMin, xMax);
-            float randomY = Random.Range(yMin, yMax);
+            float randomX = Random.Range(zoneSardine.XMin, zoneSardine.XMax);
+            float randomY = Random.Range(zoneSardine.YMin, zoneSardine.YMax);
             Vector3 randomPosition = new Vector3(randomX, randomY, 0f);
 
             // Instancier l'objet à la position aléatoire
