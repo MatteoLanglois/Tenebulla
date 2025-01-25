@@ -5,10 +5,7 @@ namespace Script
     public class SardineMovement : MonoBehaviour
     {
         // Definir la zone avec xDepart, xFin, yDebut, yFin
-        public float xDepart = -30f; // Limite gauche de la zone
-        public float xFin = 30f;     // Limite droite de la zone
-        public float yDebut = 20f;  // Limite basse de la zone
-        public float yFin = 60f;     // Limite haute de la zone
+        public SardineZone zoneSardine;
 
         public float speed = 6f; // Vitesse de deplacement
         public float changeDirectionInterval = 2f; // Temps entre chaque changement de direction
@@ -18,11 +15,6 @@ namespace Script
 
         private void Start()
         {
-            xDepart = -30f; // Limite gauche de la zone
-            xFin = 30f;     // Limite droite de la zone
-            yDebut = 20f;  // Limite basse de la zone
-            yFin = 60f;
-
             // Initialisation de la premiere direction aleatoire
             _randomDirection = GetRandomDirection();
         }
@@ -62,17 +54,17 @@ namespace Script
             var pos = transform.position;
 
             // Si la sardine est en dehors de la zone sur l'axe X
-            if (pos.x < xDepart || pos.x > xFin)
+            if (pos.x < zoneSardine.XMin || pos.x > zoneSardine.XMax)
             {
                 // Change de direction pour ramener la sardine dans la zone (oppos� de la direction actuelle)
-                _randomDirection.x = (pos.x < xDepart) ? 1f : -1f;
+                _randomDirection.x = (pos.x < zoneSardine.XMin) ? 1f : -1f;
                 _timer = 0f;
             }
 
             // Si la sardine est en dehors de la zone sur l'axe Y
-            if (!(pos.y < yDebut) && !(pos.y > yFin)) return;
+            if (!(pos.y < zoneSardine.YMin) && !(pos.y > zoneSardine.YMax)) return;
             // Change de direction pour ramener la sardine dans la zone (oppos� de la direction actuelle)
-            _randomDirection.y = (pos.y < yDebut) ? 1f : -1f;
+            _randomDirection.y = (pos.y < zoneSardine.YMin) ? 1f : -1f;
             _timer = 0f;
 
 
