@@ -1,93 +1,93 @@
 using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 
-public class SimpleShooter : MonoBehaviour
+namespace Script
 {
-    public Rigidbody projectile; // R�f�rence au prefab du projectile
-    public float projectileForce; // Force de projection
-    public float defaultForce = 1f; // Force par d�faut si aucune n'est d�finie
-    public TMP_Text forceText; // Affichage de la force sur l'UI
-    public float delay = 0.5f; // D�lai entre les tirs
-
-    public float fireRate = 2f; // Temps entre chaque tir (en secondes)
-
-    private float nextFireTime; // Chronomètre interne pour le tir
-
-    private IEnumerator coroutine; // Coroutine pour le délai
-
-    void Start()
+    public class SimpleShooter : MonoBehaviour
     {
-        // Initialisation de la force de tir
-        projectileForce = defaultForce;
-        UpdateForceText();
+        public Rigidbody projectile; // Reference au prefab du projectile
+        public float projectileForce; // Force de projection
+        public float defaultForce = 1f; // Force par defaut si aucune n'est definie
+        public TMP_Text forceText; // Affichage de la force sur l'UI
+        public float delay = 0.5f; // Delai entre les tirs
 
-        nextFireTime = Time.time; // Démarre immédiatement
-    }
+        public float fireRate = 2f; // Temps entre chaque tir (en secondes)
 
-    // Augmenter la force de tir
-    public void MoreForce()
-    {
-        projectileForce = Mathf.Clamp(projectileForce + 5f, 5f, 150f);
-        UpdateForceText();
-    }
+        private float _nextFireTime; // Chronomètre interne pour le tir
 
-    // R�duire la force de tir
-    public void LessForce()
-    {
-        projectileForce = Mathf.Clamp(projectileForce - 5f, 5f, 150f);
-        UpdateForceText();
-    }
+        private IEnumerator _coroutine; // Coroutine pour le délai
 
-    // Met � jour l'affichage de la force
-    private void UpdateForceText()
-    {
-        if (forceText != null)
+        void Start()
         {
-            forceText.text = projectileForce.ToString("F1"); // Format avec une d�cimale
-        }
-    }
+            // Initialisation de la force de tir
+            projectileForce = defaultForce;
+            UpdateForceText();
 
-    // M�thode pour tirer
-    public void Shoot()
-    {
-        
-        coroutine = ShooterDelay(delay);
-        StartCoroutine(coroutine);
-        
-    }
-
-    // Coroutine pour le d�lai de tir
-    private IEnumerator ShooterDelay(float delay)
-    {
-        yield return new WaitForSeconds(delay);
-        
-        if (projectile != null)
-        {
-            
-            // Instanciation du projectile
-            Rigidbody cloneProjectile = Instantiate(projectile, transform.position, transform.rotation);
-
-            // Application de la force
-            cloneProjectile.linearVelocity = Vector3.up * projectileForce/10f;
-            Debug.Log("Direction : " + transform.forward + " | Vélocité : " + cloneProjectile.linearVelocity);
-
-            // Destruction du projectile apr�s 5 secondes
-            Destroy(cloneProjectile.gameObject, 3f);
+            _nextFireTime = Time.time; // Démarre immédiatement
         }
 
-        // Fin de la coroutine
-        coroutine = null;
-    }
-
-    void Update()
-    {
-        // Vérifie si le délai de tir est écoulé
-        if (Time.time >= nextFireTime)
+        // Augmenter la force de tir
+        public void MoreForce()
         {
+            projectileForce = Mathf.Clamp(projectileForce + 5f, 5f, 150f);
+            UpdateForceText();
+        }
+
+        // Reduire la force de tir
+        public void LessForce()
+        {
+            projectileForce = Mathf.Clamp(projectileForce - 5f, 5f, 150f);
+            UpdateForceText();
+        }
+
+        // Met e jour l'affichage de la force
+        private void UpdateForceText()
+        {
+            if (forceText != null)
+            {
+                forceText.text = projectileForce.ToString("F1"); // Format avec une decimale
+            }
+        }
+
+        // Methode pour tirer
+        private void Shoot()
+        {
+
+            _coroutine = ShooterDelay(delay);
+            StartCoroutine(_coroutine);
+
+        }
+
+        // Coroutine pour le delai de tir
+        private IEnumerator ShooterDelay(float delay)
+        {
+            yield return new WaitForSeconds(delay);
+
+            if (projectile)
+            {
+
+                // Instanciation du projectile
+                var cloneProjectile = Instantiate(projectile, transform.position, transform.rotation);
+
+                // Application de la force
+                cloneProjectile.linearVelocity = Vector3.up * projectileForce/10f;
+
+                // Destruction du projectile apres 5 secondes
+                Destroy(cloneProjectile.gameObject, 3f);
+            }
+
+            // Fin de la coroutine
+            _coroutine = null;
+        }
+
+        void Update()
+        {
+            // Vérifie si le délai de tir est écoulé
+            if (!(Time.time >= _nextFireTime)) return;
+
             Shoot(); // Tire un projectile
-            nextFireTime = Time.time + fireRate; // Planifie le prochain tir
+            _nextFireTime = Time.time + fireRate; // Planifie le prochain tir
         }
     }
 }
