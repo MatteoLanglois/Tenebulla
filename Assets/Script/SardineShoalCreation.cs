@@ -19,7 +19,6 @@ public class SardineShoalCreation : MonoBehaviour
 
     void SpawnObjects()
     {
-        Debug.Log("Aled ?");
         for (int i = 0; i < numberOfObjects; i++)
         {
             // Générer une position aléatoire dans la zone définie
