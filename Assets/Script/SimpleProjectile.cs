@@ -11,6 +11,7 @@ namespace Script
         private const float DefaultForce = 5f; // Force par defaut si aucune n'est definie
         public TMP_Text forceText; // Affichage de la force sur l'UI
         public float delay = 0.5f; // Delai entre les tirs
+        public float angleVariation = 5f; // Amplitude de la variation aléatoire en degrés
 
         private float _nextFireTime; // Chronomètre interne pour le tir
 
@@ -61,8 +62,9 @@ namespace Script
             // Instanciation du projectile
             var cloneProjectile = Instantiate(projectile, transform.position, transform.rotation);
 
-            // Calcul de la direction en fonction de la rotation de l'objet
-            var shootDirection = transform.forward;
+            // Calcul de la direction en fonction de la rotation de l'objet avec une variation aléatoire
+            var randomAngle = Random.Range(-angleVariation, angleVariation);
+            var shootDirection = Quaternion.Euler(0, randomAngle, 0) * transform.forward;
 
             // Application de la force
             cloneProjectile.linearVelocity = shootDirection * projectileForce;
