@@ -7,7 +7,7 @@ public class MenuManager : MonoBehaviour
     public void PlayGame()
     {
         // Charge la scène de jeu 
-        SceneManager.LoadScene("GameScene");
+        SceneManager.LoadScene("BeginningCutSceneScene");
     }
 
     public void OpenOptions()
