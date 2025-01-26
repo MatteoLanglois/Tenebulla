@@ -78,7 +78,7 @@ namespace Script
             {
                 // La bulle est morte
                 _bubble.SetActive(false);
-                if (_rigidbody)
+                if (!_rigidbody)
                 {
                     _rigidbody = GetComponent<Rigidbody>();
                 }

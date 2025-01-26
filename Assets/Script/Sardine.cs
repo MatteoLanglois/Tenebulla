@@ -7,8 +7,8 @@ namespace Script
         // Definir la zone avec xDepart, xFin, yDebut, yFin
         public SardineZone zoneSardine;
 
-        public float speed = 6f; // Vitesse de deplacement
-        public float changeDirectionInterval = 2f; // Temps entre chaque changement de direction
+        public float speed = 15f; // Vitesse de deplacement
+        public float changeDirectionInterval = 4f; // Temps entre chaque changement de direction
 
         private Vector2 _randomDirection; // Direction aleatoire actuelle (2D)
         private float _timer; // Chronometre pour changer de direction
