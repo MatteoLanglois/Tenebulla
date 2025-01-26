@@ -3,6 +3,7 @@ using UnityEngine.SceneManagement;
 
 public class MenuManager : MonoBehaviour
 {
+
     public void PlayGame()
     {
         // Charge la scène de jeu 

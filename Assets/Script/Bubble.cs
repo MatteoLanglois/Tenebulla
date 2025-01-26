@@ -38,6 +38,9 @@ namespace Script
         public Button retryButton;
         private Rigidbody _rigidbody;
 
+        // Global Data
+        public GameData gameData;
+
         private void Start()
         {
             _bubble = gameObject;
@@ -45,6 +48,7 @@ namespace Script
             _bubble.transform.localScale = new Vector3(bubbleSize, bubbleSize, bubbleSize);
             _initialTransform = transform;
             retryButton.onClick.AddListener(RestartGame);
+            gameData.ResetData();
         }
 
         private void Update()
@@ -106,9 +110,10 @@ namespace Script
             ApplyBuoyancy();
         }
 
-        private static void RestartGame()
+        private void RestartGame()
         {
             Time.timeScale = 1f;
+            gameData.ResetData();
             UnityEngine.SceneManagement.SceneManager.LoadScene(0);
         }
 
@@ -200,15 +205,32 @@ namespace Script
 
                 var lifeOrb = other.gameObject.GetComponent<LifeOrb>();
                 if (lifeOrb == null) return;
-                life = Mathf.Min(life + lifeOrb.GetLifeAmount(), MaxLife);
+
+                float lifeReceved = 0f;
+                if (life + lifeOrb.GetLifeAmount()<= MaxLife)
+                {
+                    lifeReceved = lifeOrb.GetLifeAmount();
+                } else
+                {
+                    lifeReceved = MaxLife - life;
+                }
+                life = life + lifeReceved;//Mathf.Min(life + lifeOrb.GetLifeAmount(), MaxLife);
+
+                gameData.AddOxygenRecovered(lifeReceved);
+
                 Destroy(other.gameObject);
             } else if (other.gameObject.CompareTag("Enemy"))
             {
-                life -= 20f;
+                float damage = 20f;
+                life -= damage;
+                gameData.AddOxygenLost(damage);
+
                 other.gameObject.SetActive(false);
             } else if (other.gameObject.CompareTag("Rock"))
             {
+                float damage = 10f;
                 life -= 10f;
+                gameData.AddOxygenLost(damage);
             }
         }
     }
