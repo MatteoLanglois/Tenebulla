@@ -41,7 +41,7 @@ namespace Script
         // Life settings
         private const float MaxLife = 100f;
         public float life = 50f;
-        private const float BleedRate = 0.05f;
+        private const float BleedRate = 0.03f;
         private const float MaxSize = 2f;
 
         // Death screen
