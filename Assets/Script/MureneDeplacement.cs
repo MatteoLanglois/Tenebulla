@@ -63,7 +63,6 @@ namespace Script
 
             if (_extention)
             {
-                //Debug.Log("extention");
                 transform.position += _avance * Time.deltaTime;
             }
             else

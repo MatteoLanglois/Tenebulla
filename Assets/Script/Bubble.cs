@@ -13,11 +13,17 @@ namespace Script
         private Transform _initialTransform;
 
         // Movement settings
-        public float moveForce = 3f;       // Force de déplacement appliquée
-        public float maxSpeed = 200f;       // Vitesse maximale de la bulle
-        public float waterResistance = 0.95f; // Réduction progressive de la vitesse pour simuler l'eau
-        public float buoyancyFactor = 4f;     // Force de flottabilité
-        public float buoyancyThreshold = 0.25f;  // Taille minimum pour que la bulle monte
+        public float moveForce = 3f; // Force de déplacement appliquée
+        public float maxSpeed = 200f; // Vitesse maximale de la bulle
+
+        public float
+            waterResistance =
+                0.95f; // Réduction progressive de la vitesse pour simuler l'eau
+
+        public float buoyancyFactor = 4f; // Force de flottabilité
+
+        public float
+            buoyancyThreshold = 0.25f; // Taille minimum pour que la bulle monte
 
         // Dash settings
         public float dashForce = 50f; // Force du dash
@@ -45,7 +51,8 @@ namespace Script
         {
             _bubble = gameObject;
             _rb = _bubble.GetComponent<Rigidbody>();
-            _bubble.transform.localScale = new Vector3(bubbleSize, bubbleSize, bubbleSize);
+            _bubble.transform.localScale =
+                new Vector3(bubbleSize, bubbleSize, bubbleSize);
             _initialTransform = transform;
             retryButton.onClick.AddListener(RestartGame);
             gameData.ResetData();
@@ -70,7 +77,9 @@ namespace Script
                 PerformDash();
             }
 
-            _bubble.transform.position = new Vector3(_bubble.transform.position.x, _bubble.transform.position.y, _initialTransform.position.z);
+            _bubble.transform.position = new Vector3(
+                _bubble.transform.position.x, _bubble.transform.position.y,
+                _initialTransform.position.z);
         }
 
         private void FixedUpdate()
@@ -86,13 +95,15 @@ namespace Script
                 {
                     _rigidbody = GetComponent<Rigidbody>();
                 }
+
                 _rigidbody.linearVelocity = Vector3.zero;
                 deathScreen.SetActive(true);
             }
 
             // Changer la taille de la bulle en fonction de sa vie
             bubbleSize = (life / MaxLife) * MaxSize;
-            _bubble.transform.localScale = new Vector3(bubbleSize, bubbleSize, bubbleSize);
+            _bubble.transform.localScale =
+                new Vector3(bubbleSize, bubbleSize, bubbleSize);
 
             // Appliquer la résistance de l'eau
             _rb.linearVelocity *= waterResistance;
@@ -120,7 +131,18 @@ namespace Script
         // ReSharper disable Unity.PerformanceAnalysis
         private void PerformDash()
         {
-            var dashDirection = new Vector3(Input.GetAxisRaw("Horizontal"), 1).normalized + Vector3.up;
+            Debug.Log("Dash sound");
+            if (!audioSource.enabled)
+            {
+                audioSource.enabled = true;
+            }
+
+            audioSource.volume = 0.5f;
+            audioSource.pitch = Random.Range(0.8f, 1.2f);
+            audioSource.Play();
+            var dashDirection =
+                new Vector3(Input.GetAxisRaw("Horizontal"), 1).normalized +
+                Vector3.up;
             _rb.AddForce(dashDirection * dashForce, ForceMode.Impulse);
             StartCoroutine(DashAnimation());
 
@@ -131,10 +153,6 @@ namespace Script
             else
             {
                 life = 1f;
-            }
-            if (audioSource)
-            {
-                audioSource.Play();
             }
 
             _canDash = false;
@@ -154,7 +172,8 @@ namespace Script
             // Scale down
             while (elapsed < duration)
             {
-                _bubble.transform.localScale = Vector3.Lerp(originalScale, dashScale, elapsed / duration);
+                _bubble.transform.localScale = Vector3.Lerp(originalScale,
+                    dashScale, elapsed / duration);
                 elapsed += Time.deltaTime;
                 yield return null;
             }
@@ -169,7 +188,8 @@ namespace Script
             // Scale back up
             while (elapsed < duration)
             {
-                _bubble.transform.localScale = Vector3.Lerp(dashScale, originalScale, elapsed / duration);
+                _bubble.transform.localScale = Vector3.Lerp(dashScale,
+                    originalScale, elapsed / duration);
                 elapsed += Time.deltaTime;
                 yield return null;
             }
@@ -177,6 +197,7 @@ namespace Script
             _bubble.transform.localScale = originalScale;
             dashAnimation.Stop();
         }
+
         private void ResetDash()
         {
             _canDash = true;
@@ -207,30 +228,43 @@ namespace Script
                 if (lifeOrb == null) return;
 
                 float lifeReceved = 0f;
-                if (life + lifeOrb.GetLifeAmount()<= MaxLife)
+                if (life + lifeOrb.GetLifeAmount() <= MaxLife)
                 {
                     lifeReceved = lifeOrb.GetLifeAmount();
-                } else
+                }
+                else
                 {
                     lifeReceved = MaxLife - life;
                 }
-                life = life + lifeReceved;//Mathf.Min(life + lifeOrb.GetLifeAmount(), MaxLife);
+
+                life = life +
+                       lifeReceved; //Mathf.Min(life + lifeOrb.GetLifeAmount(), MaxLife);
 
                 gameData.AddOxygenRecovered(lifeReceved);
 
                 Destroy(other.gameObject);
-            } else if (other.gameObject.CompareTag("Enemy"))
+            }
+            else if (other.gameObject.CompareTag("Enemy"))
             {
-                float damage = 20f;
+                const float damage = 20f;
                 life -= damage;
                 gameData.AddOxygenLost(damage);
 
                 other.gameObject.SetActive(false);
-            } else if (other.gameObject.CompareTag("Rock"))
+            }
+            else if (other.gameObject.CompareTag("Rock"))
             {
-                float damage = 10f;
+                const float damage = 10f;
                 life -= 10f;
                 gameData.AddOxygenLost(damage);
+            }
+            else if (other.gameObject.CompareTag("Shell"))
+            {
+                var shell = other.gameObject.GetComponent<Shell>();
+                if (shell == null) return;
+
+                gameData.AddCoins(shell.GetShellId());
+                shell.gameObject.SetActive(false);
             }
         }
     }
