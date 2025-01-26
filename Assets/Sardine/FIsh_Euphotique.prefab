@@ -150,5 +150,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   zoneSardine: {fileID: 11400000, guid: 2ab3a34436ed17443a27b7ff2664f150, type: 2}
-  speed: 3
-  changeDirectionInterval: 2
+  speed: 10
+  changeDirectionInterval: 4
