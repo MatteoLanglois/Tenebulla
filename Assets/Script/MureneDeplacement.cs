@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System;
 
 namespace Script
 {
@@ -17,6 +18,8 @@ namespace Script
         public float cooldown = 1;
         //temps pass� par la murene avant de se retracter
         public float attente = 2;
+
+        public AudioSource attackSound;
 
         public GameObject spawner;
 
@@ -55,7 +58,7 @@ namespace Script
         // Update is called once per frame
         private void Update()
         {
-            //StartCoroutine(Avancer());
+            StartCoroutine(Avancer());
             
         }
 
@@ -65,7 +68,7 @@ namespace Script
             {
                 _timer -= Time.deltaTime;
                 if (_timer < 0) _timer = 0;
-                return null;
+                yield break;
             }
 
             if (_extention)
@@ -91,11 +94,12 @@ namespace Script
 
             if (avancement > longueur)
             {
+                Debug.Log("son");
+                attackSound.Play();
+
                 _extention = false;
                 _timer = attente;
             }
-
-            return null;
         }
     }
 }
