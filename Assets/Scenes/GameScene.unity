@@ -4969,7 +4969,7 @@ Transform:
   m_GameObject: {fileID: 317066889}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.7, y: 558, z: -30.2}
+  m_LocalPosition: {x: -5.7, y: 89, z: -30.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -5982,6 +5982,7 @@ MonoBehaviour:
   deathScreen: {fileID: 832105518}
   retryButton: {fileID: 544136}
   gameData: {fileID: 11400000, guid: 3957a9365ef4a28429403a6fc5654d65, type: 2}
+  animator: {fileID: 0}
 --- !u!54 &427625709
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -6493,10 +6494,10 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b428c3d3b90694c44b7e39f83ecaa2f0, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 519154614}
+      addedObject: {fileID: 519154613}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b428c3d3b90694c44b7e39f83ecaa2f0, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 519154613}
+      addedObject: {fileID: 519154614}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b428c3d3b90694c44b7e39f83ecaa2f0, type: 3}
       insertIndex: -1
       addedObject: {fileID: 519154612}
@@ -8004,10 +8005,10 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b428c3d3b90694c44b7e39f83ecaa2f0, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 289763432}
+      addedObject: {fileID: 289763436}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b428c3d3b90694c44b7e39f83ecaa2f0, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 289763436}
+      addedObject: {fileID: 289763432}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b428c3d3b90694c44b7e39f83ecaa2f0, type: 3}
       insertIndex: -1
       addedObject: {fileID: 289763440}
@@ -12099,10 +12100,10 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b428c3d3b90694c44b7e39f83ecaa2f0, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1369159666}
+      addedObject: {fileID: 1369159665}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b428c3d3b90694c44b7e39f83ecaa2f0, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1369159665}
+      addedObject: {fileID: 1369159666}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b428c3d3b90694c44b7e39f83ecaa2f0, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1369159670}
@@ -12503,7 +12504,7 @@ Transform:
   m_GameObject: {fileID: 1405775606}
   serializedVersion: 2
   m_LocalRotation: {x: -0.000000119209275, y: -0.0000001391861, z: -7.1054265e-15, w: 1}
-  m_LocalPosition: {x: -5.7, y: 458.3, z: -12.500001}
+  m_LocalPosition: {x: -5.7, y: -10.699997, z: -12.500001}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -16422,7 +16423,7 @@ Transform:
   m_GameObject: {fileID: 1948457323}
   serializedVersion: 2
   m_LocalRotation: {x: -0.0000000753353, y: -0.00000013918608, z: -1.0485626e-14, w: 1}
-  m_LocalPosition: {x: -5.7, y: 458.3, z: -12.500001}
+  m_LocalPosition: {x: -5.7, y: -10.699997, z: -12.500001}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -17655,10 +17656,10 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b428c3d3b90694c44b7e39f83ecaa2f0, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 4974769}
+      addedObject: {fileID: 4974773}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b428c3d3b90694c44b7e39f83ecaa2f0, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 4974773}
+      addedObject: {fileID: 4974769}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b428c3d3b90694c44b7e39f83ecaa2f0, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4974777}

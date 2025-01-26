@@ -1,12 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Animations;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Script
 {
     public class Bubble : MonoBehaviour
     {
+        private static readonly int Heal = Animator.StringToHash("Heal");
+        private static readonly int Death = Animator.StringToHash("Death");
+        private static readonly int Dash = Animator.StringToHash("Dash");
         private GameObject _bubble;
         private Rigidbody _rb;
         public float bubbleSize = 1f;
@@ -46,6 +51,8 @@ namespace Script
 
         // Global Data
         public GameData gameData;
+
+        [FormerlySerializedAs("healAnimation")] public Animator animator;
 
         private void Start()
         {
@@ -90,6 +97,11 @@ namespace Script
             if (life <= 0)
             {
                 // La bulle est morte
+                if (animator)
+                {
+                    animator.SetTrigger(Death);
+                }
+
                 _bubble.SetActive(false);
                 if (!_rigidbody)
                 {
@@ -165,7 +177,11 @@ namespace Script
             var elapsed = 0f;
 
             var originalScale = _bubble.transform.localScale;
-            var dashScale = new Vector3(bubbleSize, bubbleSize, bubbleSize / 2);
+            var dashScale = new Vector3(bubbleSize, bubbleSize, bubbleSize * 0.9f);
+            if (animator)
+            {
+                animator.SetTrigger(Dash);
+            }
 
             dashAnimation.Play();
 
@@ -227,7 +243,9 @@ namespace Script
                 var lifeOrb = other.gameObject.GetComponent<LifeOrb>();
                 if (lifeOrb == null) return;
 
-                float lifeReceved = 0f;
+                PlayHealAnimations();
+
+                var lifeReceved = 0f;
                 if (life + lifeOrb.GetLifeAmount() <= MaxLife)
                 {
                     lifeReceved = lifeOrb.GetLifeAmount();
@@ -237,8 +255,7 @@ namespace Script
                     lifeReceved = MaxLife - life;
                 }
 
-                life = life +
-                       lifeReceved; //Mathf.Min(life + lifeOrb.GetLifeAmount(), MaxLife);
+                life += lifeReceved; //Mathf.Min(life + lifeOrb.GetLifeAmount(), MaxLife);
 
                 gameData.AddOxygenRecovered(lifeReceved);
 
@@ -265,6 +282,14 @@ namespace Script
 
                 gameData.AddCoins(shell.GetShellId());
                 shell.gameObject.SetActive(false);
+            }
+        }
+
+        private void PlayHealAnimations()
+        {
+            if (animator != null)
+            {
+                animator.SetTrigger(Heal);
             }
         }
     }
