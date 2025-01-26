@@ -8,9 +8,9 @@ namespace Script
     {
         public Transform player; // Référence au joueur
         public float detectionRange = 30f; // Distance à laquelle le pufferfish détecte le joueur
-        public float growScale = 10f; // Taille maximale lorsqu'il gonfle
-        public float growSpeed = 2f; // Vitesse à laquelle il grossit
-        public Color inflatedColor = Color.red; // Couleur lorsqu'il est gonflé
+        public float growScale = 2f; // Taille maximale lorsqu'il gonfle
+        public float growSpeed = 5f; // Vitesse à laquelle il grossit
+        public GameObject inflatedFish;
         public float blinkInterval = 0.2f; // Intervalle de clignotement
         public int blinkCount = 5; // Nombre de clignotements avant de grossir
 
@@ -33,11 +33,13 @@ namespace Script
         {
             // Vérifier la distance entre le joueur et le pufferfish
             var distance = Vector3.Distance(player.position, transform.position);
+            Debug.Log("Distance: " + distance);
             _playerInRange = distance <= detectionRange;
 
             // Si le joueur est dans la portée et que le pufferfish ne clignote pas déjà
             if (_playerInRange && !_isBlinking && !_isGrowing)
             {
+                Debug.Log("Player in range");
                 StartCoroutine(BlinkAndGrow());
             }
 
@@ -54,9 +56,9 @@ namespace Script
             // Faire clignoter le pufferfish
             for (var i = 0; i < blinkCount; i++)
             {
-                _renderer.material.color = Color.clear; // Transparence
+                _renderer.transform.localScale = _originalScale * 1.5f; // Taille agrandie
                 yield return new WaitForSeconds(blinkInterval);
-                _renderer.material.color = _originalColor; // Couleur originale
+                _renderer.transform.localScale = _originalScale; // Taille originale
                 yield return new WaitForSeconds(blinkInterval);
 
                 // Si le joueur s'éloigne pendant le clignotement, arrêter
@@ -70,13 +72,13 @@ namespace Script
             _isGrowing = true;
 
             // Changer la couleur et la taille
-            _renderer.material.color = inflatedColor;
+            inflatedFish.SetActive(true);
             var t = 0f;
 
             while (t < 1f)
             {
                 t += Time.deltaTime * growSpeed;
-                transform.localScale = Vector3.Lerp(_originalScale, _originalScale * growScale, t);
+                inflatedFish.transform.localScale = Vector3.Lerp(_originalScale, _originalScale * growScale, t);
                 yield return null;
             }
 
@@ -87,7 +89,8 @@ namespace Script
         {
             // Remettre la couleur et la taille originales
             _renderer.material.color = _originalColor;
-            transform.localScale = _originalScale;
+            inflatedFish.SetActive(false);
+            inflatedFish.transform.localScale = _originalScale;
 
             _isBlinking = false;
             _isGrowing = false;
