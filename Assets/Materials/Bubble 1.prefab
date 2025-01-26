@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 5383613169032372351}
   - component: {fileID: 3855010903507795024}
   m_Layer: 6
-  m_Name: Bubble
+  m_Name: Bubble 1
   m_TagString: LifeOrb
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
