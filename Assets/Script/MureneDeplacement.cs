@@ -55,7 +55,7 @@ namespace Script
         // Update is called once per frame
         private void Update()
         {
-            StartCoroutine(Avancer());
+            //StartCoroutine(Avancer());
             
         }
 
