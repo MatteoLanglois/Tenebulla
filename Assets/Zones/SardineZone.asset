@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dda272d148d08b5449eccc60ca1a6bf1, type: 3}
   m_Name: SardineZone
   m_EditorClassIdentifier: 
-  xMin: -50
-  xMax: 50
-  yMin: 400
+  xMin: -30
+  xMax: 30
+  yMin: 500
   yMax: 600
