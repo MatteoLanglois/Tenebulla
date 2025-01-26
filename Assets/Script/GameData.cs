@@ -3,20 +3,20 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "GameData", menuName = "Custom Objects/Game Data", order = 1)]
 public class GameData : ScriptableObject
 {
-    [SerializeField] private float oxygenLost;         // Oxygène perdu
-    [SerializeField] private float oxygenRecovered;    // Oxygène récupéré
-    [SerializeField] private int coinsCollected;       // Pièces collectées
+    [SerializeField] private float oxygenLost;         // Oxygï¿½ne perdu
+    [SerializeField] private float oxygenRecovered;    // Oxygï¿½ne rï¿½cupï¿½rï¿½
+    [SerializeField] private int[] coinsCollected;       // Piï¿½ces collectï¿½es
 
-    private float startTime;                           // Temps de début
+    private float startTime;                           // Temps de dï¿½but
     private float endTime;                             // Temps de fin
     private bool isTimerRunning;                      // Indique si le timer est actif
 
     // Getters
     public float OxygenLost => oxygenLost;
     public float OxygenRecovered => oxygenRecovered;
-    public int CoinsCollected => coinsCollected;
+    public int[] CoinsCollected => coinsCollected;
 
-    // Méthodes d'ajout
+    // Mï¿½thodes d'ajout
     public void AddOxygenLost(float amount)
     {
         oxygenLost += Mathf.Max(0, amount);
@@ -27,9 +27,9 @@ public class GameData : ScriptableObject
         oxygenRecovered += Mathf.Max(0, amount);
     }
 
-    public void AddCoins(int amount)
+    public void AddCoins(int id)
     {
-        coinsCollected += Mathf.Max(0, amount);
+        coinsCollected[id] = id;
     }
 
     // Gestion du timer
@@ -38,7 +38,7 @@ public class GameData : ScriptableObject
         if (!isTimerRunning)
         {
             isTimerRunning = true;
-            startTime = Time.time; // Temps courant au moment du démarrage
+            startTime = Time.time; // Temps courant au moment du dï¿½marrage
         }
     }
 
@@ -47,7 +47,7 @@ public class GameData : ScriptableObject
         if (isTimerRunning)
         {
             isTimerRunning = false;
-            endTime = Time.time; // Temps courant au moment de l'arrêt
+            endTime = Time.time; // Temps courant au moment de l'arrï¿½t
         }
     }
 
@@ -60,17 +60,17 @@ public class GameData : ScriptableObject
         }
         else
         {
-            // Si le timer est arrêté, on retourne la différence entre startTime et endTime
+            // Si le timer est arrï¿½tï¿½, on retourne la diffï¿½rence entre startTime et endTime
             return endTime - startTime;
         }
     }
 
-    // Méthode de réinitialisation
+    // Mï¿½thode de rï¿½initialisation
     public void ResetData()
     {
         oxygenLost = 0f;
         oxygenRecovered = 0f;
-        coinsCollected = 0;
+        coinsCollected = new int[3];
         startTime = 0f;
         endTime = 0f;
         isTimerRunning = false;
