@@ -28,10 +28,12 @@ public class LoadEndGameUI : MonoBehaviour
     public void UpdateUI()
     {
         if (gameData == null) return;
-        
+
         // Met à jour chaque champ de texte avec les valeurs actuelles de GameData
-        if (oxygenLostText != null)
+        if (oxygenLostText != null) {
+            
             oxygenLostText.text = $"{gameData.OxygenLost:F1}";
+    }
 
         if (oxygenRecoveredText != null)
             oxygenRecoveredText.text = $"{gameData.OxygenRecovered:F1}";

@@ -7,6 +7,7 @@ public class GotoEndGame : MonoBehaviour
     {
         if (other.CompareTag("Player")) // Assurez-vous que votre joueur a le tag "Player"
         {
+            
             SceneManager.LoadScene("EndingCutSceneScene");
         }
     }
