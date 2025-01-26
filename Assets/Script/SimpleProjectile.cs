@@ -61,8 +61,11 @@ namespace Script
             // Instanciation du projectile
             var cloneProjectile = Instantiate(projectile, transform.position, transform.rotation);
 
+            // Calcul de la direction en fonction de la rotation de l'objet
+            var shootDirection = transform.forward;
+
             // Application de la force
-            cloneProjectile.linearVelocity = Vector3.up * projectileForce;
+            cloneProjectile.linearVelocity = shootDirection * projectileForce;
 
             // Destruction du projectile apres 5 secondes
             Destroy(cloneProjectile.gameObject, 5f);
