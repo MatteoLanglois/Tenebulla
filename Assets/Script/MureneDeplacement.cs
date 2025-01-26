@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 namespace Script
 {
@@ -54,11 +55,17 @@ namespace Script
         // Update is called once per frame
         private void Update()
         {
+            StartCoroutine(Avancer());
+            
+        }
+
+        private IEnumerator Avancer()
+        {
             if (_timer > 0)
             {
                 _timer -= Time.deltaTime;
                 if (_timer < 0) _timer = 0;
-                return;
+                return null;
             }
 
             if (_extention)
@@ -70,7 +77,7 @@ namespace Script
                 transform.position -= _avance * Time.deltaTime;
             }
 
-            var ecart = transform.position-_debutExtention;
+            var ecart = transform.position - _debutExtention;
             var angleZ = spawner.transform.eulerAngles.z;
             var rotation = Quaternion.Euler(0, 0, -angleZ);
             var avancement = -(rotation * ecart).x;
@@ -82,9 +89,13 @@ namespace Script
                 _timer = cooldown;
             }
 
-            if (!(avancement > longueur)) return;
-            _extention = false;
-            _timer = attente;
+            if (avancement > longueur)
+            {
+                _extention = false;
+                _timer = attente;
+            }
+
+            return null;
         }
     }
 }
