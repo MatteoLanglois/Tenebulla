@@ -120,6 +120,14 @@ namespace Script
         // ReSharper disable Unity.PerformanceAnalysis
         private void PerformDash()
         {
+            Debug.Log("Dash sound");
+            if (!audioSource.enabled)
+            {
+                audioSource.enabled = true;
+            }
+            audioSource.volume = 0.5f;
+            audioSource.pitch = Random.Range(0.8f, 1.2f);
+            audioSource.Play();
             var dashDirection = new Vector3(Input.GetAxisRaw("Horizontal"), 1).normalized + Vector3.up;
             _rb.AddForce(dashDirection * dashForce, ForceMode.Impulse);
             StartCoroutine(DashAnimation());
@@ -131,10 +139,6 @@ namespace Script
             else
             {
                 life = 1f;
-            }
-            if (audioSource)
-            {
-                audioSource.Play();
             }
 
             _canDash = false;
