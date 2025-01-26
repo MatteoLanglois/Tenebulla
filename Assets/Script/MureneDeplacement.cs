@@ -29,7 +29,7 @@ namespace Script
         private void Start()
         {
             _debutExtention = transform.position;
-            initialiseAvance();
+            InitialiseAvance();
             //setPos(depart);
 
             //fait en sorte que le sprite soit retourn� si il est trop tourn� (qu'il est a l'envers)
@@ -40,10 +40,10 @@ namespace Script
         }
         private void OnValidate()
         {
-            initialiseAvance();
+            InitialiseAvance();
         }
 
-        private void initialiseAvance()
+        private void InitialiseAvance()
         {
             var direction = new Vector3(speed, 0, 0);
             var angleZ = spawner.transform.eulerAngles.z;
@@ -63,6 +63,7 @@ namespace Script
 
             if (_extention)
             {
+                Debug.Log("extention");
                 transform.position += _avance * Time.deltaTime;
             }
             else
