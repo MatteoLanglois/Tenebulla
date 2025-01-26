@@ -6,6 +6,7 @@ namespace Script
 {
     public class MureneDeplacement : MonoBehaviour
     {
+        private static readonly int Attack = Animator.StringToHash("Attack");
         //longueur de l'extention de la murene
         public float longueur = 3;
         //position de depart de la murene
@@ -27,6 +28,8 @@ namespace Script
         private Vector3 _debutExtention;
         private Vector3 _avance;
         private float _timer;
+
+        public Animator animator;
 
 
         // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -74,6 +77,7 @@ namespace Script
             if (_extention)
             {
                 transform.position += _avance * Time.deltaTime;
+                if (animator) animator.SetTrigger(Attack);
             }
             else
             {

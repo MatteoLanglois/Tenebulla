@@ -1,8 +1,5 @@
 using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.Animations;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Script
@@ -52,7 +49,7 @@ namespace Script
         // Global Data
         public GameData gameData;
 
-        [FormerlySerializedAs("healAnimation")] public Animator animator;
+        public Animator animator;
 
         private void Start()
         {
@@ -245,19 +242,19 @@ namespace Script
 
                 PlayHealAnimations();
 
-                var lifeReceved = 0f;
+                var lifeReceived = 0f;
                 if (life + lifeOrb.GetLifeAmount() <= MaxLife)
                 {
-                    lifeReceved = lifeOrb.GetLifeAmount();
+                    lifeReceived = lifeOrb.GetLifeAmount();
                 }
                 else
                 {
-                    lifeReceved = MaxLife - life;
+                    lifeReceived = MaxLife - life;
                 }
 
-                life += lifeReceved; //Mathf.Min(life + lifeOrb.GetLifeAmount(), MaxLife);
+                life += lifeReceived; //Mathf.Min(life + lifeOrb.GetLifeAmount(), MaxLife);
 
-                gameData.AddOxygenRecovered(lifeReceved);
+                gameData.AddOxygenRecovered(lifeReceived);
 
                 Destroy(other.gameObject);
             }
