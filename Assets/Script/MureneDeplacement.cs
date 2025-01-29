@@ -1,109 +1,117 @@
 using UnityEngine;
 using System.Collections;
-using System;
 
 namespace Script
 {
     public class MureneDeplacement : MonoBehaviour
     {
-        private static readonly int Attack = Animator.StringToHash("Attack");
-        //longueur de l'extention de la murene
         public float longueur = 3;
-        //position de depart de la murene
-        public float depart = 0;
-
-        //vitesse d'extention de la murene
         public float speed = 1;
-
-        //temps pass� par la murene dans son tuyau avant de sortir
         public float cooldown = 1;
-        //temps pass� par la murene avant de se retracter
         public float attente = 2;
-
         public AudioSource attackSound;
-
         public GameObject spawner;
 
-        private bool _extention = false;
-        private Vector3 _debutExtention;
-        private Vector3 _avance;
+        private bool _isExtending;
+        private Vector3 _startPosition;
+        private Vector3 _movementDirection;
         private float _timer;
+        private Animator _animator;
+        private int _animationHash;
+        private bool _animationLaunched;
 
-        public Animator animator;
-
-
-        // Start is called once before the first execution of Update after the MonoBehaviour is created
         private void Start()
         {
-            _debutExtention = transform.position;
-            InitialiseAvance();
-            //setPos(depart);
+            _startPosition = transform.position;
+            InitializeMovementDirection();
+            _animator = GetComponent<Animator>();
+            _animationHash = Animator.StringToHash(_animator.runtimeAnimatorController.animationClips[0].name);
 
-            //fait en sorte que le sprite soit retourn� si il est trop tourn� (qu'il est a l'envers)
-            if (spawner.transform.eulerAngles.z > 90 && spawner.transform.eulerAngles.z < 270)
+            if (spawner.transform.eulerAngles.z is > 90 and < 270)
             {
                 transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y, -transform.localScale.z);
             }
-        }
-        private void OnValidate()
-        {
-            InitialiseAvance();
+
+            StartCoroutine(Move());
         }
 
-        private void InitialiseAvance()
+        private void OnValidate()
+        {
+            InitializeMovementDirection();
+        }
+
+        private void InitializeMovementDirection()
         {
             var direction = new Vector3(speed, 0, 0);
             var angleZ = spawner.transform.eulerAngles.z;
             var rotation = Quaternion.Euler(0, 0, angleZ);
-            _avance = -(rotation * direction);
+            _movementDirection = -(rotation * direction);
         }
 
-        // Update is called once per frame
-        private void Update()
+        private IEnumerator Move()
         {
-            StartCoroutine(Avancer());
-            
+            while (true)
+            {
+                if (_timer > 0)
+                {
+                    _timer -= Time.deltaTime;
+                    if (_timer < 0) _timer = 0;
+                    yield return null;
+                    continue;
+                }
+
+                transform.position += _movementDirection * ((_isExtending ? 1 : -1) * Time.deltaTime);
+
+                if (_animator)
+                {
+                    switch (_isExtending)
+                    {
+                        case true when !_animationLaunched:
+                            _animator.SetBool(_animationHash, true);
+                            _animationLaunched = true;
+                            break;
+                        case false when _animationLaunched:
+                            _animator.SetBool(_animationHash, false);
+                            _animationLaunched = false;
+                            break;
+                    }
+                }
+
+                var gap = transform.position - _startPosition;
+                var angleZ = spawner.transform.eulerAngles.z;
+                var rotation = Quaternion.Euler(0, 0, -angleZ);
+                var advancement = -(rotation * gap).x;
+
+                if (advancement < 0)
+                {
+                    _isExtending = true;
+                    transform.position = _startPosition;
+                    _timer = cooldown;
+                }
+
+                if (advancement > longueur)
+                {
+                    attackSound.Play();
+                    _isExtending = false;
+                    _timer = attente;
+                }
+
+                yield return null;
+            }
         }
 
-        private IEnumerator Avancer()
+        private void OnDrawGizmos()
         {
-            if (_timer > 0)
-            {
-                _timer -= Time.deltaTime;
-                if (_timer < 0) _timer = 0;
-                yield break;
-            }
+            if (spawner == null) return;
 
-            if (_extention)
-            {
-                transform.position += _avance * Time.deltaTime;
-                if (animator) animator.SetTrigger(Attack);
-            }
-            else
-            {
-                transform.position -= _avance * Time.deltaTime;
-            }
-
-            var ecart = transform.position - _debutExtention;
+            Gizmos.color = Color.red;
+            var start = transform.position;
+            var direction = transform.right;
             var angleZ = spawner.transform.eulerAngles.z;
-            var rotation = Quaternion.Euler(0, 0, -angleZ);
-            var avancement = -(rotation * ecart).x;
+            var rotation = Quaternion.Euler(0, 0, angleZ);
+            var end = start + rotation * direction * longueur;
 
-            if (avancement < 0)
-            {
-                _extention = true;
-                transform.position = _debutExtention;
-                _timer = cooldown;
-            }
-
-            if (avancement > longueur)
-            {
-                Debug.Log("son");
-                attackSound.Play();
-
-                _extention = false;
-                _timer = attente;
-            }
+            Gizmos.DrawLine(start, end);
         }
     }
 }

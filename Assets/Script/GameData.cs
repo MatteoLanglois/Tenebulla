@@ -29,7 +29,7 @@ public class GameData : ScriptableObject
 
     public void AddCoins(int id)
     {
-        coinsCollected[id] = id;
+        coinsCollected[id] = 1;
     }
 
     // Gestion du timer
